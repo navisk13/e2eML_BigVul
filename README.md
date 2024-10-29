@@ -1,14 +1,10 @@
-## TO EDIT
+## End-to-End ML based on BigVul Dataset
 
-This folder contains the implementation for LR, SVM, KNN, RF, XGB and LSTM.
+This repo is based on [https://github.com/anh56/dl4sa/tree/main](https://github.com/anh56/dl4sa/tree/main/ml)
 
 To run with all sample settings:
 
-  - ```bash
+   ```bash
     pip install -r requirements.txt
     ./run.sh
-    ```
-    
-
-This code is partially based on https://github.com/lhmtriet/Function-level-Vulnerability-Assessment
 
