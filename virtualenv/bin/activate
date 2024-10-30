@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/navi/Documents/e2e-mlops/bigvul_prototype/original_code/virtualenv"
+VIRTUAL_ENV="/Users/navi/Documents/e2e-mlops/bigvul_prototype/e2eML_BigVul/virtualenv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

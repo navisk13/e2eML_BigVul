@@ -22,6 +22,8 @@ from sklearn.multiclass import OneVsRestClassifier
 from helpers import *
 from scipy.sparse import hstack
 from gensim.models import FastText, Word2Vec
+import mlflow
+import mlflow.sklearn
 
 os.environ['PYTHONHASHSEED'] = '42'
 
@@ -410,6 +412,8 @@ def train_and_evaluate(cvss_col, feature):
 
     x_train, x_val, x_test = generate_features(x_train, x_val, x_test, feature)
 
+    mlflow.set_tracking_uri("https://dagshub.com/navisk13/e2eML_BigVul.mlflow")
+
     for model_name in models:
 
         param_set = []
@@ -432,8 +436,28 @@ def train_and_evaluate(cvss_col, feature):
             multiclass = False if len(np.unique(y_train)) else True
             # Get and evaluate the classifier
             clf = get_classifier(model_name, multiclass, len(np.unique(y_train)), *parameters)
-            evaluate(clf, x_train, y_train, x_val, y_val, x_test, y_test,
-                     clf_settings, result_file, write=True)
+
+            with mlflow.start_run():
+                # Log parameters
+                mlflow.log_params({
+                    "cvss_col": cvss_col,
+                    "granularity": granularity,
+                    "feature": feature,
+                    "model_name": model_name,
+                    "parameters": parameters
+                })
+
+                evaluate(clf, x_train, y_train, x_val, y_val, x_test, y_test, clf_settings, result_file, write=True)
+            
+                y_val_pred = clf.predict(x_val)
+                y_test_pred = clf.predict(x_test)
+                mlflow.log_metric("val_accuracy", accuracy_score(y_val, y_val_pred))
+                mlflow.log_metric("test_accuracy", accuracy_score(y_test, y_test_pred))
+
+                # Log the model
+                mlflow.sklearn.log_model(clf, "model")
+        
+        mlflow.end_run()
 
     avg_df = compute_average_results(result_file)
     avg_df.to_csv(f'{result_folder}avg_results_{granularity}_{cvss_col}_{feature}.csv', index=False)

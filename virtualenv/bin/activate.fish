@@ -29,7 +29,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/navi/Documents/e2e-mlops/bigvul_prototype/original_code/virtualenv"
+set -gx VIRTUAL_ENV "/Users/navi/Documents/e2e-mlops/bigvul_prototype/e2eML_BigVul/virtualenv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
